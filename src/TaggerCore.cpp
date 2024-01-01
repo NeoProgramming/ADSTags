@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "TaggerCore.h"
 #include <string>
 #include <string.h>
@@ -182,9 +183,10 @@ void TaggerCore::addToLog(const std::wstring &fpath)
 
 void TaggerCore::makeTags(std::list<Tag*> &fileTags, std::string &tags)
 {
-	// make 
+	// make tags string to saving into ADS
+	// existing file tags
 	for (auto &t : fileTags) {
-		if (t->chk == -1) {
+		if (t->chk == 2) {
 			if (!tags.empty())
 				tags += " ";
 			tags += t->tag;
@@ -194,7 +196,7 @@ void TaggerCore::makeTags(std::list<Tag*> &fileTags, std::string &tags)
 			}
 		}
 	}
-	//
+	// new tags
 	for (auto &t : m_Tags) {
 		if (t.chk == 1) {
 			if (!tags.empty())

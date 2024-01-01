@@ -123,6 +123,9 @@ BOOL CADSTagsDlg::OnInitDialog()
 	m_wndUsedTags.SetImageList(&m_imageList, LVSIL_SMALL);
 	m_wndFreeTags.SetImageList(&m_imageList, LVSIL_SMALL);
 
+	m_wndUsedTags.SetExtendedStyle(LVS_EX_FULLROWSELECT);
+	m_wndFreeTags.SetExtendedStyle(LVS_EX_FULLROWSELECT);
+
 	Core.init();
 	LoadIni();
 	LoadLists();

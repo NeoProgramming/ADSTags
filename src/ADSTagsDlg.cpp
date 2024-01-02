@@ -67,8 +67,7 @@ void CADSTagsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDOK, m_wndOK);
 	DDX_Control(pDX, IDCANCEL, m_wndCancel);
 	DDX_Control(pDX, IDC_BUTTON2, m_wndCPath);
-	DDX_Control(pDX, IDC_MFCBUTTON1, m_wndUp);
-	DDX_Control(pDX, IDC_MFCBUTTON2, m_wndDn);
+	DDX_Control(pDX, IDC_COMBO1, m_wndPaths);
 }
 
 BEGIN_MESSAGE_MAP(CADSTagsDlg, CDialogEx)
@@ -198,6 +197,16 @@ void CADSTagsDlg::LoadFreeTags(TagIter b, TagIter e, int chk)
 	}
 }
 
+void CADSTagsDlg::LoadPaths()
+{
+	m_wndPaths.ResetContent();
+	auto b = Core.m_Files.begin(), e = Core.m_Files.end();
+	for (int i = 0; b != e; ++b, ++i) {
+		m_wndPaths.AddString(b->m_fpath.c_str());
+	}
+	m_wndPaths.SetCurSel(0);
+}
+
 void CADSTagsDlg::LoadLists()
 {
 	m_wndUsedTags.InsertColumn(0, _T("Used Tags"), 130);
@@ -206,6 +215,8 @@ void CADSTagsDlg::LoadLists()
 
 	m_wndFreeTags.InsertColumn(0, _T("Free Tags"), 130);
 	LoadFreeTags(Core.m_Tags.begin(), Core.m_Tags.end(), 0);
+
+	LoadPaths();
 }
 
 void CADSTagsDlg::SaveLists()
@@ -274,7 +285,7 @@ void CADSTagsDlg::OnSize(UINT nType, int cx, int cy)
 	if (!m_wndUsedTags.GetSafeHwnd())
 		return;
 
-	const int D = 7;
+	const int D = 5;
 	const int BW = 80;
 	const int BH = 22;
 
@@ -282,11 +293,11 @@ void CADSTagsDlg::OnSize(UINT nType, int cx, int cy)
 	const int LH = cy - 4*D - 2*BH;
 	const int BY = cy - D - BH;
 	m_wndCPath.MoveWindow(D, D, BW, BH);
-
+	m_wndPaths.MoveWindow(2*D + BW, D, cx - 3*D - BW, BH);
 	m_wndUsedTags.MoveWindow(D, 2*D+BH, LW, LH);
 	m_wndFreeTags.MoveWindow(D + LW + D, 2 * D + BH, LW, LH);
 	m_wndAdd.MoveWindow(D, BY, BW, BH);
-	m_wndEdit.MoveWindow(2 * D + BW, cy - BH - D, cx - 5*D-3*BW, BH);
+	m_wndEdit.MoveWindow(2*D + BW, cy - BH - D, cx - 5*D-3*BW, BH);
 	m_wndOK.MoveWindow(cx - 2*BW-2*D, cy-BH-D, BW, BH);
 	m_wndCancel.MoveWindow(cx - BW - D, cy - BH - D, BW, BH);
 }
@@ -391,15 +402,21 @@ void CADSTagsDlg::OnLvnItemchangedFreeList(NMHDR *pNMHDR, LRESULT *pResult)
 
 void CADSTagsDlg::OnBnClickedCopyPath()
 {
-	std::wstring paths;
-	for (auto &f : Core.m_Files) {
-		if (!paths.empty())
-			paths += L" ";
-		paths += f.m_fpath;
-	}
+//	std::wstring paths;
+//	for (auto &f : Core.m_Files) {
+//		if (!paths.empty())
+//			paths += L" ";
+//		paths += f.m_fpath;
+//	}
+//	const wchar_t* output = paths.c_str();
+//	const size_t size = paths.length() * 2 + 2;
+	int i = m_wndPaths.GetCurSel();
+	if (i < 0) return;
+	CString text;
+	m_wndPaths.GetLBText(i, text);
 
-	const wchar_t* output = paths.c_str();
-	const size_t size = paths.length() * 2 + 2;
+	const wchar_t* output = text.GetBuffer();
+	const size_t size = text.GetLength() * 2 + 2;
 
 	HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, size);
 	memcpy(GlobalLock(hMem), output, size);

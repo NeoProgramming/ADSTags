@@ -37,6 +37,7 @@ protected:
 	void LoadLists();
 	void LoadUsedTags(TagIter b, TagIter e);
 	void LoadFreeTags(TagIter b, TagIter e, int chk);
+	void LoadPaths();
 	void SaveLists();
 	void AddTags();
 public:
@@ -56,6 +57,5 @@ public:
 	afx_msg void OnLvnItemchangedFreeList(NMHDR *pNMHDR, LRESULT *pResult);
 	afx_msg void OnBnClickedCopyPath();
 	afx_msg void OnLvnItemchangedUsedList(NMHDR *pNMHDR, LRESULT *pResult);
-	CMFCButton m_wndUp;
-	CMFCButton m_wndDn;
+	CComboBox m_wndPaths;
 };

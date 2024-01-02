@@ -162,7 +162,7 @@
       <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>copy $(TargetPath) d:\MySoft\ADSTagger.exe</Command>
+      <Command>copy $(TargetPath) d:\MySoft\ADSTags.exe</Command>
     </PostBuildEvent>
     <PostBuildEvent>
       <Message>copying app to MySoft...</Message>

@@ -222,6 +222,10 @@ void TaggerCore::parseCommandLine()
 		if (std::filesystem::exists(pArgv[i])) {
 			FileTags f;
 			f.m_fpath = pArgv[i];
+
+			while (!f.m_fpath.empty() && (f.m_fpath.back() == '/' || f.m_fpath.back() == '\\'))
+				f.m_fpath.pop_back();
+
 			GetFTime(pArgv[i], f.ftc, f.tfa, f.tfw);
 			loadFileTags(f);
 			m_Files.push_back(f);
